@@ -14,18 +14,18 @@
 
 MFRC522 mfrc522_rect(SS_PIN, RST_PIN); // Create MFRC522 instance for the first reader
 MFRC522 mfrc522_circle(SS_PIN2, RST_PIN); // Create MFRC522 instance for the second reader
-
-byte WhiteRect[] = {0xFD, 0xC1, 0xFF, 0x52}; // Array to store the target color 1 UID
-byte YellowRect[] = {0xA4, 0x3D, 0x8F, 0x6A}; // Array to store the target color 1 UID
-byte BlueCirc[] = {0x74, 0x1E, 0x98, 0x85}; // Array to store the target color 2 UID
-byte RedCirc[] = {0x29, 0xC1, 0xBF, 0x7A}; // Array to store the target color 2 UID
+// Array to store the target color  UID
+byte WhiteRect[] = {0xFD, 0xC1, 0xFF, 0x52}; 
+byte YellowRect[] = {0xA4, 0x3D, 0x8F, 0x6A}; 
+byte BlueCirc[] = {0x74, 0x1E, 0x98, 0x85}; 
+byte RedCirc[] = {0x29, 0xC1, 0xBF, 0x7A}; 
 void setup() {
-  Serial.begin(9600); // Initialize serial communications with the PC
-  while (!Serial); // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
+  Serial.begin(9600); // Initialize serial communications with the PC(Change if needed!)
+  while (!Serial); // Do nothing if no serial port is opened 
   SPI.begin(); // Init SPI bus
   mfrc522_rect.PCD_Init(); // Init MFRC522 for the first reader
   mfrc522_circle.PCD_Init(); // Init MFRC522 for the second reader
-  delay(4); // Optional delay. Some boards need more time after init to be ready, see Readme
+  delay(4); // Some boards need time after init to be ready
 
   pinMode(GREEN_LED_PIN, OUTPUT); // Set green LED pin as output
   pinMode(RED_LED_PIN, OUTPUT);   // Set red LED pin as output
@@ -176,7 +176,7 @@ void randomizeGame(byte* WhiteRect1, byte* WhiteRect2, byte* BlueCirc1, byte* Bl
       case 5:
       //color
       memcpy(YellowRect1, YellowRect, sizeof(YellowRect));
-      digitalWrite(YELLOW_LED_PIN, HIGH); // Turn on white LED
+      digitalWrite(YELLOW_LED_PIN, HIGH); // Turn on Yellow LED
       //shape
       memcpy(YellowRect2, YellowRect, sizeof(YellowRect));
       memcpy(WhiteRect2, WhiteRect, sizeof(WhiteRect));
@@ -186,7 +186,7 @@ void randomizeGame(byte* WhiteRect1, byte* WhiteRect2, byte* BlueCirc1, byte* Bl
       case 6:
       //color
       memcpy(YellowRect1, YellowRect, sizeof(YellowRect));
-      digitalWrite(YELLOW_LED_PIN, HIGH); // Turn on white LED
+      digitalWrite(YELLOW_LED_PIN, HIGH); // Turn on Yellow LED
       //shape
       memcpy(BlueCirc2, BlueCirc, sizeof(BlueCirc));
       memcpy(RedCirc2, RedCirc, sizeof(RedCirc));
