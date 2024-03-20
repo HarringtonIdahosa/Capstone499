@@ -59,7 +59,7 @@ void loop() {
   }
 
   // Wait for a new card on the first reader
-  if (mfrc522_rect.PICC_IsNewCardPresent() && mfrc522_rect.PICC_ReadCardSerial()) {
+  while (mfrc522_rect.PICC_IsNewCardPresent() && mfrc522_rect.PICC_ReadCardSerial()) {
     //Rectangle
     // Check if the UID matches the target color
     if (checkTag(mfrc522_rect.uid.uidByte, mfrc522_rect.uid.size, WhiteRect)) {
@@ -79,8 +79,8 @@ void loop() {
       Serial.println("Correct shape(rectangle)!");
       digitalWrite(RECTANGLE_LED_PIN, LOW); // Turn off white LED
     }
-    else (checkTag(mfrc522_circle.uid.uidByte, mfrc522_circle.uid.size, WhiteRect));{
-      Serial.println("Incorrect shape(circle)");
+    else (!mfrc522_rect.PICC_IsNewCardPresent() && !mfrc522_rect.PICC_ReadCardSerial());{
+      Serial.println("Incorrect shape(Place in rectangle)");
       digitalWrite(RED_LED_PIN, HIGH); // Turn on red LED
       delay(1000);
       digitalWrite(RED_LED_PIN, LOW); // Turn off red LED
@@ -89,7 +89,7 @@ void loop() {
     
   }
   // Wait for a new card on the second reader
-  if (mfrc522_circle.PICC_IsNewCardPresent() && mfrc522_circle.PICC_ReadCardSerial()) {
+  while (mfrc522_circle.PICC_IsNewCardPresent() && mfrc522_circle.PICC_ReadCardSerial()) {
      //Circle
      // Check if the UID matches the target color
     if (checkTag(mfrc522_circle.uid.uidByte, mfrc522_circle.uid.size, BlueCirc)) {
@@ -106,8 +106,8 @@ void loop() {
       Serial.println("Correct shape(circle)!");
       digitalWrite(CIRCLE_LED_PIN, LOW); // Turn off circle LED
     }
-    else (checkTag(mfrc522_rect.uid.uidByte, mfrc522_rect.uid.size, BlueCirc)); {
-      Serial.println("Incorrect shape(rectangle)");
+   else (!mfrc522_circle.PICC_IsNewCardPresent() && !mfrc522_circle.PICC_ReadCardSerial());{
+      Serial.println("Incorrect shape(Place in circle)");
       digitalWrite(RED_LED_PIN, HIGH); // Turn on red LED
       delay(1000);
       digitalWrite(RED_LED_PIN, LOW); // Turn off red LED
@@ -133,71 +133,66 @@ void randomizeGame(byte* WhiteRect1, byte* WhiteRect2, byte* BlueCirc1, byte* Bl
   int randomOption = random(6); // Generate a random number 
 
   switch (randomOption) {
-    case 0:
+    case 1:
      //color
       memcpy(BlueCirc1, BlueCirc, sizeof(BlueCirc));
       digitalWrite(BLUE_LED_PIN, HIGH); // Turn on blue LED
       //shape
       memcpy(BlueCirc2, BlueCirc, sizeof(BlueCirc));
-      digitalWrite(CIRCLE_LED_PIN, HIGH); // Turn on circle LED
       memcpy(RedCirc2, RedCirc, sizeof(RedCirc));
       digitalWrite(CIRCLE_LED_PIN, HIGH); // Turn on circle LED
       Serial.println("Target color: Blue, Target shape: Circle");
       break;
-    case 1:
+    case 2:
       //color
       memcpy(BlueCirc1, BlueCirc, sizeof(BlueCirc));
       digitalWrite(BLUE_LED_PIN, HIGH); // Turn on blue LED
      //shape
       memcpy(WhiteRect2, WhiteRect, sizeof(WhiteRect));
-      digitalWrite(RECTANGLE_LED_PIN, HIGH); // Turn on rectangle LED
       memcpy(YellowRect2, YellowRect, sizeof(YellowRect));
       digitalWrite(RECTANGLE_LED_PIN, HIGH); // Turn on rectangle LED
       Serial.println("Target color: Blue, Target shape: Rectangle");
       break;
-    case 2:
+    case 3:
      //color
       memcpy(WhiteRect1, WhiteRect, sizeof(WhiteRect));
       digitalWrite(WHITE_LED_PIN, HIGH); // Turn on white LED
       //shape
       memcpy(BlueCirc2, BlueCirc, sizeof(BlueCirc));
-      digitalWrite(CIRCLE_LED_PIN, HIGH); // Turn on circle LED
       memcpy(RedCirc2, RedCirc, sizeof(RedCirc));
       digitalWrite(CIRCLE_LED_PIN, HIGH); // Turn on circle LED
       Serial.println("Target color: White, Target shape: Circle");
       break;
-    case 3:
+    case 4:
       //color
       memcpy(WhiteRect1, WhiteRect, sizeof(WhiteRect));
       digitalWrite(WHITE_LED_PIN, HIGH); // Turn on white LED
       //shape
       memcpy(WhiteRect2, WhiteRect, sizeof(WhiteRect));
-      digitalWrite(RECTANGLE_LED_PIN, HIGH); // Turn on rectangle LED
       memcpy(YellowRect2, YellowRect, sizeof(YellowRect));
       digitalWrite(RECTANGLE_LED_PIN, HIGH); // Turn on rectangle LED
       Serial.println("Target color: White, Target shape: Rectangle");
-      break;
-      case 4:
-      //color
-      memcpy(YellowRect1, YellowRect, sizeof(YellowRect));
-      digitalWrite(YELLOW_LED_PIN, HIGH); // Turn on white LED
-      //shape
-      memcpy(YellowRect2, YellowRect, sizeof(YellowRect));
-      digitalWrite(RECTANGLE_LED_PIN, HIGH); // Turn on rectangle LED
-      memcpy(WhiteRect2, WhiteRect, sizeof(WhiteRect));
-      digitalWrite(RECTANGLE_LED_PIN, HIGH); // Turn on rectangle LED
-      Serial.println("Target color: Yellow, Target shape: Rectangle");
       break;
       case 5:
       //color
       memcpy(YellowRect1, YellowRect, sizeof(YellowRect));
       digitalWrite(YELLOW_LED_PIN, HIGH); // Turn on white LED
       //shape
+      memcpy(YellowRect2, YellowRect, sizeof(YellowRect));
+      memcpy(WhiteRect2, WhiteRect, sizeof(WhiteRect));
+      digitalWrite(RECTANGLE_LED_PIN, HIGH); // Turn on rectangle LED
+      Serial.println("Target color: Yellow, Target shape: Rectangle");
+      break;
+      case 6:
+      //color
+      memcpy(YellowRect1, YellowRect, sizeof(YellowRect));
+      digitalWrite(YELLOW_LED_PIN, HIGH); // Turn on white LED
+      //shape
       memcpy(BlueCirc2, BlueCirc, sizeof(BlueCirc));
-      digitalWrite(CIRCLE_LED_PIN, HIGH); // Turn on circle LED
       memcpy(RedCirc2, RedCirc, sizeof(RedCirc));
       digitalWrite(CIRCLE_LED_PIN, HIGH); // Turn on circle LED
       Serial.println("Target color: Yellow, Target shape: Circle");
       break;
   }
 }
+
