@@ -1,8 +1,8 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
-#define RST_PIN 9 // Configurable, see typical pin layout above
-#define SS_PIN 10 // Configurable, see typical pin layout above
+#define RST_PIN 9 // Configurable, see typical pin layout 
+#define SS_PIN 10 // Configurable, see typical pin layout 
 #define SS_PIN2 6 // Chip select pin for the second reader
 #define GREEN_LED_PIN 7 // Connect green LED to pin 7
 #define RED_LED_PIN 8   // Connect red LED to pin 8
