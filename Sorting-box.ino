@@ -9,7 +9,6 @@
 #define INCORRECT_LED_PIN 8  
 #define YELLOW_LED_PIN A0 
 #define BLUE_LED_PIN 2  
-#define WHITE_LED_PIN 3 
 #define CIRCLE_LED_PIN 4 
 #define RECTANGLE_LED_PIN 5 
 // Define switch pins
@@ -17,13 +16,56 @@
 #define CIRCLE_SWITCH_PIN A2 
 
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance for the reader
+   // Array to store the target UIDs
+  
+   //*Circle UID
+  byte BlueCirc[] = {0x74, 0x1E, 0x98, 0x85}; 
+  //byte RedCircle[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  byte YellowCirc[] = {0x29, 0xC1, 0xBF, 0x7A}; 
+  //byte OrangeCircle[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte GreenCircle[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte PrurpleCircle[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  
+  //*RectangleUID's
+  byte BlueRect[] = {0xFD, 0xC1, 0xFF, 0x52}; 
+  //byte RedRect[] = {0xXX, 0xXX, 0xXX, 0xXX};
+  byte YellowRect[]={0xA4, 0x3D, 0x8F, 0x6A};
+  //byte OrangeRect[]={0xXX, 0xXX, 0xXX, 0xXX};
+  //byte GreenRect[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte PurpleRect[]={0xXX, 0xXX, 0xXX, 0xXX};
+  
+  //*Square UID
+  //byte BlueSquare[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte RedSquare[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte YellowSquare[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte OrangeSquare[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte GreenSquare[] = {0xXX, 0xXX, 0xXX, 0xXX};
+  //byte PurpleSquare[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
 
-// Array to store the target UIDs
-byte WhiteRect[] = {0xFD, 0xC1, 0xFF, 0x52}; 
-byte YellowRect[] = {0xA4, 0x3D, 0x8F, 0x6A}; 
-byte BlueCirc[] = {0x74, 0x1E, 0x98, 0x85}; 
-byte YellowCirc[] = {0x29, 0xC1, 0xBF, 0x7A}; 
-
+  //*Diamond UID
+  //byte BlueDiamond[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte RedDiamond[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte YellowDiamond[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte OrangeDiamond[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte GreenDiamond[] = {0xXX, 0xXX, 0xXX, 0xXX};
+  //byte PurpleDiamond[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  
+  //*Star UID
+  //byte BlueStar[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte RedStar[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte YellowStar[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte OrangeStar[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte GreenStar[] = {0xXX, 0xXX, 0xXX, 0xXX};
+  //byte PurpleStar[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  
+  //*Triangle
+  //byte BlueTriangle[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte RedTriangle[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte YellowTriangle[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte OrangeTriangle[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+  //byte GreenTriangle[] = {0xXX, 0xXX, 0xXX, 0xXX};
+  //byte PurpleTriangle[] = {0xXX, 0xXX, 0xXX, 0xXX}; 
+ 
 unsigned long lastInputTime = 0; // Variable to store the time of the last input
 
 void setup() {
@@ -37,7 +79,6 @@ void setup() {
   pinMode(INCORRECT_LED_PIN, OUTPUT);   
   pinMode(BLUE_LED_PIN, OUTPUT);  
   pinMode(YELLOW_LED_PIN, OUTPUT);  
-  pinMode(WHITE_LED_PIN, OUTPUT);
   pinMode(CIRCLE_LED_PIN, OUTPUT);
   pinMode(RECTANGLE_LED_PIN, OUTPUT); 
   // Set button pin as input with internal pull-up resistor
@@ -48,7 +89,6 @@ void setup() {
   digitalWrite(INCORRECT_LED_PIN, LOW);  
   digitalWrite(YELLOW_LED_PIN, LOW);  
   digitalWrite(BLUE_LED_PIN, LOW);  
-  digitalWrite(WHITE_LED_PIN, LOW); 
   digitalWrite(CIRCLE_LED_PIN, LOW); 
   digitalWrite(RECTANGLE_LED_PIN, LOW); 
 
@@ -58,77 +98,68 @@ void setup() {
 void loop() {
 
 // Check if both sets of color and shape LEDs are off
-  if (!digitalRead(WHITE_LED_PIN) && !digitalRead(BLUE_LED_PIN) && !digitalRead(YELLOW_LED_PIN) && !digitalRead(CIRCLE_LED_PIN) && !digitalRead(RECTANGLE_LED_PIN)) {
-    Serial.println("Correct!");
-    digitalWrite(CORRECT_LED_PIN, HIGH); // Correct indicator
-    delay(1000);
-    digitalWrite(CORRECT_LED_PIN, LOW); 
-    randomizeGame(); // Set a new target color and shape randomly
+  if (!digitalRead(BLUE_LED_PIN) && !digitalRead(YELLOW_LED_PIN) && !digitalRead(CIRCLE_LED_PIN) && !digitalRead(RECTANGLE_LED_PIN)) {
+    correct();
+    randomizeGame(); 
   }
 
 // If 3 minutes have passed, randomize the game
 if (millis() - lastInputTime > 180000) {
-      digitalWrite(INCORRECT_LED_PIN, HIGH); // Incorrect indicator
-      delay(1000);
-      digitalWrite(INCORRECT_LED_PIN, LOW); 
+      incorrect();
       randomizeGame(); 
       lastInputTime = millis(); // Reset the last input time
     }
-
-  //WhiteRectangle
-  while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(WHITE_LED_PIN)) {
+//**RECTANGLE**
+  //BlueRectangle
+  while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
   //Check Tag & switch conditions
-   if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, WhiteRect) && !digitalRead(RECTANGLE_SWITCH_PIN)) {  
-      Serial.println("Correct (White Rectangle)");
-      digitalWrite(WHITE_LED_PIN, LOW); 
+   if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRect) && !digitalRead(RECTANGLE_SWITCH_PIN)) {  
+      digitalWrite(BLUE_LED_PIN, LOW); 
       digitalWrite(RECTANGLE_LED_PIN, LOW); 
       lastInputTime = millis(); // Reset the last input time
     } else {
-      digitalWrite(INCORRECT_LED_PIN, HIGH); // Incorrect indicator
-      delay(1000);
-      digitalWrite(INCORRECT_LED_PIN, LOW); 
+      incorrect();
     } 
   }
 
   //YellowRectangle
   while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(YELLOW_LED_PIN) ) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRect) && !digitalRead(RECTANGLE_SWITCH_PIN)){
-      Serial.println("Correct (Yellow Rectangle)!");
       digitalWrite(YELLOW_LED_PIN, LOW); 
       digitalWrite(RECTANGLE_LED_PIN, LOW); 
       lastInputTime = millis(); 
     } else {
-      digitalWrite(INCORRECT_LED_PIN, HIGH);  
-      delay(1000);
-      digitalWrite(INCORRECT_LED_PIN, LOW); 
+      incorrect();
     } 
   }
+//**CIRCLE**
 //BlueCircle
   while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCirc) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-      Serial.println("Correct (blue circle)!");
       digitalWrite(BLUE_LED_PIN, LOW); 
       digitalWrite(CIRCLE_LED_PIN, LOW); 
       lastInputTime = millis(); 
     } else {
-      digitalWrite(INCORRECT_LED_PIN, HIGH); 
-      delay(1000);
-      digitalWrite(INCORRECT_LED_PIN, LOW); 
+      incorrect();
     }
   }
 //YellowCircle
   while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCirc) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-      Serial.println("Correct (Yellow circle)!");
       digitalWrite(YELLOW_LED_PIN, LOW); 
       digitalWrite(CIRCLE_LED_PIN, LOW); 
       lastInputTime = millis(); 
     } else {
-      digitalWrite(INCORRECT_LED_PIN, HIGH); 
-      delay(1000);
-      digitalWrite(INCORRECT_LED_PIN, LOW); 
+      incorrect();
     }
   }
+//**STAR**
+
+//**DIAMOND**
+
+//**TRIANGLE**
+
+//**CIRCLE**
 
 
 }
@@ -142,10 +173,10 @@ bool checkTag(byte* tagData, byte tagSize, byte* targetData) {
 void randomizeGame() {
    // Initially Turn off game LED's
   digitalWrite(YELLOW_LED_PIN, LOW); 
-  digitalWrite(BLUE_LED_PIN, LOW); 
-  digitalWrite(WHITE_LED_PIN, LOW); 
+  digitalWrite(BLUE_LED_PIN, LOW);  
   digitalWrite(CIRCLE_LED_PIN, LOW); 
   digitalWrite(RECTANGLE_LED_PIN, LOW); 
+  
   randomSeed(analogRead(4)); // Seed the random number generator with a random value
 
 switch (random(4)) {
@@ -156,9 +187,9 @@ switch (random(4)) {
       Serial.println("Target color: Blue, Target shape: Circle");
       break;
     case 1:
-      digitalWrite(WHITE_LED_PIN, HIGH); 
+      digitalWrite(BLUE_LED_PIN, HIGH); 
       digitalWrite(RECTANGLE_LED_PIN, HIGH);
-      Serial.println("Target color: White, Target shape: Rectangle");
+      Serial.println("Target color: Blue, Target shape: Rectangle");
       break;
     case 2:
       digitalWrite(YELLOW_LED_PIN, HIGH);
@@ -172,5 +203,17 @@ switch (random(4)) {
       break;
   }
 }
-
-
+// Correct indicator
+void correct() {
+    Serial.println("Correct");
+    digitalWrite(CORRECT_LED_PIN, HIGH); 
+    delay(1000);
+    digitalWrite(CORRECT_LED_PIN, LOW); 
+}
+// Incorrect indicator
+void incorrect() {
+    Serial.println("Incorrect");
+    digitalWrite(INCORRECT_LED_PIN, HIGH); 
+    delay(1000);
+    digitalWrite(INCORRECT_LED_PIN, LOW); 
+}
