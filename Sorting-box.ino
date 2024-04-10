@@ -148,11 +148,14 @@ if (millis() - lastInputTime > 180000) {
     }
 //**RECTANGLE**
 // RedRectangle
+//Read if color & shape is present
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(RED_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
+   //Check Tag & switch conditions
+   if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
+        //Turn off LED's
         digitalWrite(RED_LED_PIN, LOW); 
         digitalWrite(RECTANGLE_LED_PIN, LOW); 
-        lastInputTime = millis(); 
+        lastInputTime = millis(); // Reset the last input time 
     } else {
         incorrect();
     } 
