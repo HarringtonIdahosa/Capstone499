@@ -15,8 +15,8 @@
 #define ORANGE_LED_PIN 14
 #define GREEN_LED_PIN 15
 #define PURPLE_LED_PIN 16
-#define CIRCLE_LED_PIN 4
 //Shapes
+#define CIRCLE_LED_PIN 4
 #define RECTANGLE_LED_PIN 5
 #define SQUARE_LED_PIN 6
 #define DIAMOND_LED_PIN 10
