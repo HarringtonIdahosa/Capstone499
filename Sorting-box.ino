@@ -90,7 +90,7 @@ void setup() {
   SPI.begin(); // Init SPI bus
   mfrc522.PCD_Init(); // Init MFRC522 for the first reader
   
-   // Set all LED pins as outputs
+  // Set all LED pins as outputs
   pinMode(CORRECT_LED_PIN, OUTPUT);
   pinMode(INCORRECT_LED_PIN, OUTPUT);
   
