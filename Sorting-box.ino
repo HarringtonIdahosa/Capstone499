@@ -22,7 +22,7 @@
 #define DIAMOND_LED_PIN 10
 #define STAR_LED_PIN 11
 #define TRIANGLE_LED_PIN 12
-// Define switch pins
+//Define switch pins
 #define RECTANGLE_SWITCH_PIN A1
 #define CIRCLE_SWITCH_PIN A2
 #define SQUARE_SWITCH_PIN A3
