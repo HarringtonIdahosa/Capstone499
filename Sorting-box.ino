@@ -134,7 +134,7 @@ void setup() {
 
 void loop() {
 
-// Check if both sets of color and shape LEDs are off
+// If both sets of color and shape LEDs are off the user is correct
   if (!digitalRead(BLUE_LED_PIN) && !digitalRead(YELLOW_LED_PIN)&& !digitalRead(RED_LED_PIN)&& !digitalRead(GREEN_LED_PIN)&& !digitalRead(ORANGE_LED_PIN)&& !digitalRead(PURPLE_LED_PIN) && !digitalRead(CIRCLE_LED_PIN) && !digitalRead(RECTANGLE_LED_PIN)&& !digitalRead(TRIANGLE_LED_PIN)&& !digitalRead(STAR_LED_PIN)&& !digitalRead(SQUARE_LED_PIN)&& !digitalRead(DIAMOND_LED_PIN)) {
     correct();
     randomizeGame(); 
