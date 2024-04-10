@@ -3,4 +3,6 @@
 <img width="359" alt="Screenshot 2024-04-10 at 11 22 51 AM" src="https://github.com/HarringtonIdahosa/Capstone4991/assets/81630373/9f5f239b-5cdc-4d6d-9601-91fd3e935356">
 
 ## Overview
-The following project is used to operate a sorting box that will identify shapes and colors along with a reward system that will be utilized to let users know if they've done the task correctly.
+The following project is used to operate a sorting box that will identify shapes and colors along with a reward system that will be utilized to let users know if they've done the task correctly
+## Psuedocode 
+Linked is the psuedocode. There you'll find the schematic and matericals needed for the following project
