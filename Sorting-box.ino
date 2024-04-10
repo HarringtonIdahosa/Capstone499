@@ -280,7 +280,6 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 }
 
 //**STAR**
-
 // RedStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(RED_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar) && !digitalRead(STAR_SWITCH_PIN)) {
@@ -348,7 +347,6 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 }
 
 //**DIAMOND**
-
 // RedDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(RED_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
@@ -416,7 +414,6 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 }
 
 //**TRIANGLE**
-
 // RedTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(RED_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
@@ -484,7 +481,6 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 }
 
 //**SQUARE**
-
 // RedSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(RED_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
@@ -552,7 +548,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 }
 
 
-} //end loop
+} //end of loop
 
 // Function to check RFID tag against the target
 bool checkTag(byte* tagData, byte tagSize, byte* targetData) {
