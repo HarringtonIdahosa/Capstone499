@@ -5,15 +5,18 @@
 #define RST_PIN 9 
 #define SS_PIN 10 
 // Define LED pins 
+//Indicators
 #define CORRECT_LED_PIN 7
 #define INCORRECT_LED_PIN 8
 #define YELLOW_LED_PIN A0
+//Colors
 #define BLUE_LED_PIN 2
 #define RED_LED_PIN 13
 #define ORANGE_LED_PIN 14
 #define GREEN_LED_PIN 15
 #define PURPLE_LED_PIN 16
 #define CIRCLE_LED_PIN 4
+//Shapes
 #define RECTANGLE_LED_PIN 5
 #define SQUARE_LED_PIN 6
 #define DIAMOND_LED_PIN 10
