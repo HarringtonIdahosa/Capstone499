@@ -27,7 +27,7 @@
 #define STAR_SWITCH_PIN A5
 #define TRIANGLE_SWITCH_PIN A6
 
-MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance for the reader
+MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance for the RFID reader
    
 // Array to store the target UIDs
 
