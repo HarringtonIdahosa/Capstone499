@@ -32,7 +32,7 @@
 
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance for the RFID reader
    
-// Array to store the target UIDs
+// Array's to store the target UIDs
 
 //Circle UID
 byte BlueCircle[] = {0x74, 0x1E, 0x98, 0x85};
