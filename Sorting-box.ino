@@ -158,9 +158,9 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
         //Turn off LED's
         digitalWrite(RED_LED_PIN, LOW); 
         digitalWrite(RECTANGLE_LED_PIN, LOW); 
-        lastInputTime = millis(); // Reset the last input time 
+        lastInputTime = millis(); //Reset the last input time 
     } else {
-        incorrect();
+        incorrect(); //If conditions aren't met indicate
     } 
 }
 
