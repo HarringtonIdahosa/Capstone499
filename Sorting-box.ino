@@ -8,8 +8,8 @@
 //Indicators
 #define CORRECT_LED_PIN 7
 #define INCORRECT_LED_PIN 8
-#define YELLOW_LED_PIN A0
 //Colors
+#define YELLOW_LED_PIN A0
 #define BLUE_LED_PIN 2
 #define RED_LED_PIN 13
 #define ORANGE_LED_PIN 14
