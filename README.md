@@ -7,7 +7,7 @@ The following project is used to operate a sorting box that will identify shapes
 ## Psuedocode 
 Linked is the psuedocode. There you'll find the schematic and materials needed for the following project
 https://docs.google.com/document/d/1WxzxhWkE0W74m2VxXPVTkzYC4Sctj2WCDEtj4SwW9ZY/edit?usp=sharing
-## Group Members
+## Group Members:
 `Harrington.I` `Aiden.m` `Samuel.K`  `Seunghwan.H`
-## Developed by
+## Developed by:
 `Harrington.I`
