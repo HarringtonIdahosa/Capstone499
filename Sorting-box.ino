@@ -147,7 +147,6 @@ void loop() {
 if (millis() - lastInputTime > 180000) {
       incorrect();
       randomizeGame(); 
-     // Reset the last input time
     }
 //**RECTANGLE**
 // RedRectangle
