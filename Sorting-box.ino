@@ -149,7 +149,7 @@ if (millis() - lastInputTime > 180000) {
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(RED_LED_PIN)) {
    //Check Tag & switch conditions
    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-       correct();
+       correct(); //If conditions are met indicate
     } else {
        incorrect(); //If conditions aren't met indicate
     } 
