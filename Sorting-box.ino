@@ -137,49 +137,37 @@ void setup() {
 
 void loop() {
 
-// If both sets of color and shape LEDs are off the user is correct
-  if (!digitalRead(BLUE_LED_PIN) && !digitalRead(YELLOW_LED_PIN)&& !digitalRead(RED_LED_PIN)&& !digitalRead(GREEN_LED_PIN)&& !digitalRead(ORANGE_LED_PIN)&& !digitalRead(PURPLE_LED_PIN) && !digitalRead(CIRCLE_LED_PIN) && !digitalRead(RECTANGLE_LED_PIN)&& !digitalRead(TRIANGLE_LED_PIN)&& !digitalRead(STAR_LED_PIN)&& !digitalRead(SQUARE_LED_PIN)&& !digitalRead(DIAMOND_LED_PIN)) {
-    correct();
-    randomizeGame(); 
-  }
-
 // If 3 minutes have passed, randomize the game
 if (millis() - lastInputTime > 180000) {
       incorrect();
       randomizeGame(); 
     }
+   
 //**RECTANGLE**
 // RedRectangle
 //Read if color & shape is present
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(RED_LED_PIN)) {
    //Check Tag & switch conditions
    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-        //Turn off LED's
-        digitalWrite(RED_LED_PIN, LOW); 
-        digitalWrite(RECTANGLE_LED_PIN, LOW); 
-       
+       correct();
     } else {
-        incorrect(); //If conditions aren't met indicate
+       incorrect(); //If conditions aren't met indicate
     } 
 }
 
 // OrangeRectangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-        digitalWrite(ORANGE_LED_PIN, LOW); 
-        digitalWrite(RECTANGLE_LED_PIN, LOW); 
-       
+       correct();
     } else {
-        incorrect();
+       incorrect();
     } 
 }
 
 // YellowRectangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-        digitalWrite(YELLOW_LED_PIN, LOW); 
-        digitalWrite(RECTANGLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -188,9 +176,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // GreenRectangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-        digitalWrite(GREEN_LED_PIN, LOW); 
-        digitalWrite(RECTANGLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -199,9 +185,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // BlueRectangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {  
-        digitalWrite(BLUE_LED_PIN, LOW); 
-        digitalWrite(RECTANGLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -210,9 +194,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // PurpleRectangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-        digitalWrite(PURPLE_LED_PIN, LOW); 
-        digitalWrite(RECTANGLE_LED_PIN, LOW); 
-       
+       correct();
     } else {
         incorrect();
     } 
@@ -221,9 +203,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // RedCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(RED_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-        digitalWrite(RED_LED_PIN, LOW); 
-        digitalWrite(CIRCLE_LED_PIN, LOW); 
-       
+       correct();
     } else {
         incorrect();
     } 
@@ -232,9 +212,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // OrangeCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-        digitalWrite(ORANGE_LED_PIN, LOW); 
-        digitalWrite(CIRCLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -243,9 +221,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // YellowCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-        digitalWrite(YELLOW_LED_PIN, LOW); 
-        digitalWrite(CIRCLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -254,9 +230,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // GreenCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-        digitalWrite(GREEN_LED_PIN, LOW); 
-        digitalWrite(CIRCLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -265,9 +239,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // BlueCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {  
-        digitalWrite(BLUE_LED_PIN, LOW); 
-        digitalWrite(CIRCLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -276,9 +248,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // PurpleCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-        digitalWrite(PURPLE_LED_PIN, LOW); 
-        digitalWrite(CIRCLE_LED_PIN, LOW); 
-       
+       correct();
     } else {
         incorrect();
     } 
@@ -288,9 +258,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // RedStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(RED_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar) && !digitalRead(STAR_SWITCH_PIN)) {
-        digitalWrite(RED_LED_PIN, LOW); 
-        digitalWrite(STAR_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -299,9 +267,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // OrangeStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar) && !digitalRead(STAR_SWITCH_PIN)) {
-        digitalWrite(ORANGE_LED_PIN, LOW); 
-        digitalWrite(STAR_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -310,9 +276,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // YellowStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar) && !digitalRead(STAR_SWITCH_PIN)) {
-        digitalWrite(YELLOW_LED_PIN, LOW); 
-        digitalWrite(STAR_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -321,9 +285,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // GreenStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar) && !digitalRead(STAR_SWITCH_PIN)) {
-        digitalWrite(GREEN_LED_PIN, LOW); 
-        digitalWrite(STAR_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -332,9 +294,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // BlueStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar) && !digitalRead(STAR_SWITCH_PIN)) {  
-        digitalWrite(BLUE_LED_PIN, LOW); 
-        digitalWrite(STAR_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -343,9 +303,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // PurpleStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar) && !digitalRead(STAR_SWITCH_PIN)) {
-        digitalWrite(PURPLE_LED_PIN, LOW); 
-        digitalWrite(STAR_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -355,9 +313,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // RedDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(RED_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
-        digitalWrite(RED_LED_PIN, LOW); 
-        digitalWrite(DIAMOND_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -366,9 +322,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // OrangeDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
-        digitalWrite(ORANGE_LED_PIN, LOW); 
-        digitalWrite(DIAMOND_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -377,9 +331,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // YellowDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
-        digitalWrite(YELLOW_LED_PIN, LOW); 
-        digitalWrite(DIAMOND_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -388,9 +340,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // GreenDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
-        digitalWrite(GREEN_LED_PIN, LOW); 
-        digitalWrite(DIAMOND_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -399,9 +349,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // BlueDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {  
-        digitalWrite(BLUE_LED_PIN, LOW); 
-        digitalWrite(DIAMOND_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -410,9 +358,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // PurpleDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
-        digitalWrite(PURPLE_LED_PIN, LOW); 
-        digitalWrite(DIAMOND_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -422,9 +368,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // RedTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(RED_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
-        digitalWrite(RED_LED_PIN, LOW); 
-        digitalWrite(TRIANGLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -433,9 +377,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // OrangeTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
-        digitalWrite(ORANGE_LED_PIN, LOW); 
-        digitalWrite(TRIANGLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -444,9 +386,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // YellowTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
-        digitalWrite(YELLOW_LED_PIN, LOW); 
-        digitalWrite(TRIANGLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -455,9 +395,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // GreenTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
-        digitalWrite(GREEN_LED_PIN, LOW); 
-        digitalWrite(TRIANGLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -466,9 +404,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // BlueTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {  
-        digitalWrite(BLUE_LED_PIN, LOW); 
-        digitalWrite(TRIANGLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -477,9 +413,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // PurpleTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
-        digitalWrite(PURPLE_LED_PIN, LOW); 
-        digitalWrite(TRIANGLE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -489,9 +423,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // RedSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(RED_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
-        digitalWrite(RED_LED_PIN, LOW); 
-        digitalWrite(SQUARE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -500,9 +432,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // OrangeSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
-        digitalWrite(ORANGE_LED_PIN, LOW); 
-        digitalWrite(SQUARE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -511,9 +441,7 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // YellowSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
-        digitalWrite(YELLOW_LED_PIN, LOW); 
-        digitalWrite(SQUARE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -522,20 +450,16 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // GreenSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
-        digitalWrite(GREEN_LED_PIN, LOW); 
-        digitalWrite(SQUARE_LED_PIN, LOW); 
-       
+       correct();
     } else {
-        incorrect();
+       incorrect();
     } 
 }
 
 // BlueSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {  
-        digitalWrite(BLUE_LED_PIN, LOW); 
-        digitalWrite(SQUARE_LED_PIN, LOW); 
-       
+        correct();
     } else {
         incorrect();
     } 
@@ -544,11 +468,9 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
 // PurpleSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
     if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
-        digitalWrite(PURPLE_LED_PIN, LOW); 
-        digitalWrite(SQUARE_LED_PIN, LOW); 
-       
+       correct();
     } else {
-        incorrect();
+       incorrect();
     } 
 }
 
@@ -765,10 +687,23 @@ switch (random(36)) {
 }
 // Correct indicator
 void correct() {
-    Serial.println("Correct");
-    digitalWrite(CORRECT_LED_PIN, HIGH); 
-    delay(1000);
-    digitalWrite(CORRECT_LED_PIN, LOW); 
+  digitalWrite(YELLOW_LED_PIN, LOW);
+  digitalWrite(BLUE_LED_PIN, LOW);
+  digitalWrite(RED_LED_PIN, LOW);
+  digitalWrite(ORANGE_LED_PIN, LOW);
+  digitalWrite(GREEN_LED_PIN, LOW);
+  digitalWrite(PURPLE_LED_PIN, LOW);
+  digitalWrite(CIRCLE_LED_PIN, LOW);
+  digitalWrite(RECTANGLE_LED_PIN, LOW);
+  digitalWrite(SQUARE_LED_PIN, LOW);
+  digitalWrite(DIAMOND_LED_PIN, LOW);
+  digitalWrite(STAR_LED_PIN, LOW);
+  digitalWrite(TRIANGLE_LED_PIN, LOW);
+  Serial.println("Correct");
+  digitalWrite(CORRECT_LED_PIN, HIGH); 
+  delay(1000);
+  digitalWrite(CORRECT_LED_PIN, LOW); 
+  randomizeGame(); 
 }
 // Incorrect indicator
 void incorrect() {
