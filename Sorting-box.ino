@@ -7,7 +7,9 @@
 // Define LED pins 
 //Indicators
 #define CORRECT_LED_PIN 7
-#define INCORRECT_LED_PIN 8
+#define INCORRECT_COLOR_LED_PIN 8  
+#define INCORRECT_SHAPE_LED_PIN 19
+#define INCORRECT_HOLE_LED_PIN 17  
 //Colors
 #define YELLOW_LED_PIN A0
 #define BLUE_LED_PIN 2
@@ -92,8 +94,10 @@ void setup() {
   
   // Set all LED pins as outputs
   pinMode(CORRECT_LED_PIN, OUTPUT);
-  pinMode(INCORRECT_LED_PIN, OUTPUT);
-  
+  pinMode(INCORRECT_SHAPE_LED_PIN, OUTPUT);   
+  pinMode(INCORRECT_HOLE_LED_PIN, OUTPUT);   
+  pinMode(INCORRECT_COLOR_LED_PIN, OUTPUT);   
+
   pinMode(BLUE_LED_PIN, OUTPUT);
   pinMode(YELLOW_LED_PIN, OUTPUT);
   pinMode(RED_LED_PIN,OUTPUT);
@@ -116,7 +120,10 @@ void setup() {
   pinMode(TRIANGLE_SWITCH_PIN, INPUT_PULLUP);
   // Initially turn off output
   digitalWrite(CORRECT_LED_PIN, LOW);
-  digitalWrite(INCORRECT_LED_PIN, LOW);
+  digitalWrite(INCORRECT_SHAPE_LED_PIN, LOW);  
+  digitalWrite(INCORRECT_COLOR_LED_PIN, LOW);  
+  digitalWrite(INCORRECT_HOLE_LED_PIN, LOW);  
+
   
   digitalWrite(YELLOW_LED_PIN, LOW);
   digitalWrite(BLUE_LED_PIN, LOW);
@@ -137,9 +144,15 @@ void setup() {
 
 void loop() {
 
-// If 3 minutes have passed, randomize the game
+bool colorcorrect=0;
+bool shapecorrect=0;
+
+// If 3 minutes have passed with no input, randomize the game
 if (millis() - lastInputTime > 180000) {
-      incorrect();
+      flashled();
+      flashled();
+      flashled();
+      flashled();
       randomizeGame(); 
     }
    
@@ -147,331 +160,1415 @@ if (millis() - lastInputTime > 180000) {
 // RedRectangle
 //Read if color & shape is present
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(RED_LED_PIN)) {
-   //Check Tag & switch conditions
-   if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-       correct(); //If conditions are met indicate
-    } else {
-       incorrect(); //If conditions aren't met indicate
+   //Check Tag 
+   if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle) ) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {  
+     shapecorrect = 1; 
+    }  
+    //Check conditions
+    if (shapecorrect&&colorcorrect && !digitalRead(RECTANGLE_SWITCH_PIN)) {  
+    correct(); //Correct
+    }
+    if (!colorcorrect) {  
+    incorrectcolor(); //Wrong color
+    }if (!shapecorrect) {  
+    incorrectshape(); //Wrong shape
+    }if (digitalRead(RECTANGLE_SWITCH_PIN)){
+    incorrecthole(); //Wrong hole
     } 
+
+
+
+
 }
 
 // OrangeRectangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-       correct();
-    } else {
-       incorrect();
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(RECTANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(RECTANGLE_SWITCH_PIN)){
+    incorrecthole();
     } 
 }
 
 // YellowRectangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(RECTANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(RECTANGLE_SWITCH_PIN)){
+    incorrecthole();
     } 
 }
 
 // GreenRectangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(RECTANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(RECTANGLE_SWITCH_PIN)){
+    incorrecthole();
     } 
 }
 
 // BlueRectangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {  
-        correct();
-    } else {
-        incorrect();
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(RECTANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(RECTANGLE_SWITCH_PIN)){
+    incorrecthole();
     } 
 }
 
 // PurpleRectangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(RECTANGLE_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle) && !digitalRead(RECTANGLE_SWITCH_PIN)) {
-       correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(RECTANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(RECTANGLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 //**CIRCLE**
 // RedCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(RED_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-       correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(CIRCLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(CIRCLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // OrangeCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(CIRCLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(CIRCLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // YellowCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(CIRCLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(CIRCLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // GreenCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(CIRCLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(CIRCLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // BlueCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {  
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(CIRCLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(CIRCLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // PurpleCircle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(CIRCLE_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle) && !digitalRead(CIRCLE_SWITCH_PIN)) {
-       correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(CIRCLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(CIRCLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 //**STAR**
 // RedStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(RED_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar) && !digitalRead(STAR_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(STAR_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(STAR_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // OrangeStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar) && !digitalRead(STAR_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(STAR_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(STAR_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // YellowStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar) && !digitalRead(STAR_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(STAR_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(STAR_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // GreenStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar) && !digitalRead(STAR_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(STAR_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(STAR_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // BlueStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar) && !digitalRead(STAR_SWITCH_PIN)) {  
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(STAR_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(STAR_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // PurpleStar
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(STAR_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar) && !digitalRead(STAR_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(STAR_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(STAR_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 //**DIAMOND**
 // RedDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(RED_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(DIAMOND_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(DIAMOND_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // OrangeDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(DIAMOND_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(DIAMOND_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // YellowDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(DIAMOND_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(DIAMOND_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // GreenDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(DIAMOND_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(DIAMOND_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // BlueDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {  
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(DIAMOND_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(DIAMOND_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // PurpleDiamnond
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(DIAMOND_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond) && !digitalRead(DIAMOND_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(DIAMOND_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(DIAMOND_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 //**TRIANGLE**
 // RedTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(RED_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(TRIANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(TRIANGLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // OrangeTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(TRIANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(TRIANGLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // YellowTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(TRIANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(TRIANGLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // GreenTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(TRIANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(TRIANGLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // BlueTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {  
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(TRIANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(TRIANGLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // PurpleTriangle
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(TRIANGLE_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle) && !digitalRead(TRIANGLE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(TRIANGLE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(TRIANGLE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 //**SQUARE**
 // RedSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(RED_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(SQUARE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(SQUARE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // OrangeSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(ORANGE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(SQUARE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(SQUARE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // YellowSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(YELLOW_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(SQUARE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(SQUARE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // GreenSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(GREEN_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
-       correct();
-    } else {
-       incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(SQUARE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(SQUARE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // BlueSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(BLUE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {  
-        correct();
-    } else {
-        incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(SQUARE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(SQUARE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 // PurpleSquare
 while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digitalRead(SQUARE_LED_PIN) && digitalRead(PURPLE_LED_PIN)) {
-    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare) && !digitalRead(SQUARE_SWITCH_PIN)) {
-       correct();
-    } else {
-       incorrect();
-    } 
+    if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleSquare)) {
+    colorcorrect = 1; 
+    shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleRectangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleCircle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleDiamond)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleTriangle)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, PurpleStar)) {  
+    colorcorrect = 1;
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, YellowSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, BlueSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, OrangeSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, GreenSquare)) {  
+     shapecorrect = 1; 
+    }else if (checkTag(mfrc522.uid.uidByte, mfrc522.uid.size, RedSquare)) {  
+     shapecorrect = 1; 
+    }  
+
+    if (shapecorrect&&colorcorrect && !digitalRead(SQUARE_SWITCH_PIN)) {  
+    correct();
+    }
+    if (!colorcorrect) {  
+    incorrectcolor();
+    }if (!shapecorrect) {  
+    incorrectshape();
+    }if (digitalRead(SQUARE_SWITCH_PIN)){
+    incorrecthole();
+    }  
 }
 
 
@@ -705,10 +1802,39 @@ void correct() {
   digitalWrite(CORRECT_LED_PIN, LOW); 
   randomizeGame(); 
 }
-// Incorrect indicator
-void incorrect() {
-    Serial.println("Incorrect");
-    digitalWrite(INCORRECT_LED_PIN, HIGH); 
+// Incorrect indicators's
+void incorrectcolor() {
+    Serial.println("Incorrect color");
+    digitalWrite(INCORRECT_COLOR_LED_PIN, HIGH); 
     delay(1000);
-    digitalWrite(INCORRECT_LED_PIN, LOW); 
+    digitalWrite(INCORRECT_COLOR_LED_PIN, LOW); 
+    lastInputTime = millis(); 
+}
+void incorrectshape() {
+    Serial.println("Incorrect shape");
+    digitalWrite(INCORRECT_SHAPE_LED_PIN, HIGH); 
+    delay(1000);
+    digitalWrite(INCORRECT_SHAPE_LED_PIN, LOW); 
+    lastInputTime = millis(); 
+}
+
+void incorrecthole() {
+    Serial.println("Incorrect shape");
+    digitalWrite(INCORRECT_HOLE_LED_PIN, HIGH); 
+    delay(1000);
+    digitalWrite(INCORRECT_HOLE_LED_PIN, LOW); 
+    lastInputTime = millis(); 
+}
+// Flash LED's
+void flashled() {
+   delay(1000);
+   digitalWrite(YELLOW_LED_PIN, LOW);  
+   digitalWrite(BLUE_LED_PIN, LOW);  
+   digitalWrite(CIRCLE_LED_PIN, LOW); 
+   digitalWrite(RECTANGLE_LED_PIN, LOW); 
+   delay(1000);
+   digitalWrite(YELLOW_LED_PIN, HIGH);  
+   digitalWrite(BLUE_LED_PIN, HIGH);  
+   digitalWrite(CIRCLE_LED_PIN, HIGH); 
+   digitalWrite(RECTANGLE_LED_PIN, HIGH); 
 }
