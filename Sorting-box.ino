@@ -196,10 +196,6 @@ while (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() && digit
     }if (digitalRead(RECTANGLE_SWITCH_PIN)){
     incorrecthole(); //Wrong hole
     } 
-
-
-
-
 }
 
 // OrangeRectangle
