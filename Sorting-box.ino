@@ -1823,14 +1823,30 @@ void incorrecthole() {
 }
 // Flash LED's
 void flashled() {
-   delay(1000);
-   digitalWrite(YELLOW_LED_PIN, LOW);  
-   digitalWrite(BLUE_LED_PIN, LOW);  
-   digitalWrite(CIRCLE_LED_PIN, LOW); 
-   digitalWrite(RECTANGLE_LED_PIN, LOW); 
-   delay(1000);
-   digitalWrite(YELLOW_LED_PIN, HIGH);  
-   digitalWrite(BLUE_LED_PIN, HIGH);  
-   digitalWrite(CIRCLE_LED_PIN, HIGH); 
-   digitalWrite(RECTANGLE_LED_PIN, HIGH); 
+  delay(1000);
+  digitalWrite(YELLOW_LED_PIN, LOW);
+  digitalWrite(BLUE_LED_PIN, LOW);
+  digitalWrite(RED_LED_PIN, LOW);
+  digitalWrite(ORANGE_LED_PIN, LOW);
+  digitalWrite(GREEN_LED_PIN, LOW);
+  digitalWrite(PURPLE_LED_PIN, LOW);
+  digitalWrite(CIRCLE_LED_PIN, LOW);
+  digitalWrite(RECTANGLE_LED_PIN, LOW);
+  digitalWrite(SQUARE_LED_PIN, LOW);
+  digitalWrite(DIAMOND_LED_PIN, LOW);
+  digitalWrite(STAR_LED_PIN, LOW);
+  digitalWrite(TRIANGLE_LED_PIN, LOW);
+  delay(1000);
+  digitalWrite(YELLOW_LED_PIN, HIGH);
+  digitalWrite(BLUE_LED_PIN, HIGH);
+  digitalWrite(RED_LED_PIN, HIGH);
+  digitalWrite(ORANGE_LED_PIN, HIGH);
+  digitalWrite(GREEN_LED_PIN, HIGH);
+  digitalWrite(PURPLE_LED_PIN, HIGH);
+  digitalWrite(CIRCLE_LED_PIN, HIGH);
+  digitalWrite(RECTANGLE_LED_PIN, HIGH);
+  digitalWrite(SQUARE_LED_PIN, HIGH);
+  digitalWrite(DIAMOND_LED_PIN, HIGH);
+  digitalWrite(STAR_LED_PIN, HIGH);
+  digitalWrite(TRIANGLE_LED_PIN, HIGH);
 }
