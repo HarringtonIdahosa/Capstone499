@@ -4,10 +4,7 @@
 
 ## Overview
 The following project is used to operate a sorting box that will identify shapes and colors along with a reward system that will be utilized to let users know if they've done the task correctly
-## Psuedocode 
-Linked is the psuedocode. There you'll find the schematic and materials needed for the following project
-https://docs.google.com/document/d/1WxzxhWkE0W74m2VxXPVTkzYC4Sctj2WCDEtj4SwW9ZY/edit?usp=sharing
-## Group Members:
-`Harrington.I` `Aiden.D` `Samuel.K`  `Seunghwan.H`
-## Developed by:
-`Harrington.I`
+## Required Parts
+`Arduino Mega board`
+`LED's`
+`RFID readers & tags`
