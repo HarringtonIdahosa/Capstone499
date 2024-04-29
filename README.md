@@ -8,3 +8,4 @@ The following project is used to operate a sorting box that will identify shapes
 `Arduino Mega board`
 `LED's`
 `RFID readers & tags`
+`Assorted wires`
